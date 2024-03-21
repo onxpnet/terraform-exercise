@@ -104,7 +104,25 @@ resource "google_sql_user" "onxp-user" {
 
 # [Recommendation] Create Service Account for CloudSQL
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account
-
+resource "google_service_account" "cloudsql-onxp" {
+  account_id = "cloudsql-onxp"
+}
 
 # [Recommendation] Add Permission to Service Account
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_iam
+resource "google_project_iam_member" "cloudsql-onxp-iam" {
+  project = var.project_id
+  role    = "roles/cloudsql.admin"
+  member  = "serviceAccount:${google_service_account.cloudsql-onxp.email}"
+}
+
+# set workload identity: attach GSA to KSA
+# parameters: k8s namespace and service account
+resource "google_service_account_iam_binding" "cloudsql-onxp-workload-identity" {
+  service_account_id = google_service_account.cloudsql-onxp.id
+  role = "roles/iam.workloadIdentityUser"
+
+  members = [
+    "serviceAccount:${var.project_id}.svc.id.goog[kong/cloudsql-onxp]",
+  ]
+}
