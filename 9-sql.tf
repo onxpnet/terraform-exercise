@@ -1,8 +1,8 @@
 # DB Instance
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance
 resource "google_sql_database_instance" "onxp-sql" {
-  name             = "onxp-sql"
-  region           = var.region
+  name = "onxp-sql"
+  region = var.region
   database_version = "POSTGRES_15"
 
   depends_on = [google_service_networking_connection.private_vpc_connection_support]
@@ -43,6 +43,46 @@ resource "google_sql_database_instance" "onxp-sql" {
   }
 
   deletion_protection = false
+}
+
+# replica
+resource "google_sql_database_instance" "onxp-sql-replica" {
+  name = "onxp-sql-replica"
+  region = var.region
+  database_version = "POSTGRES_15"
+  master_instance_name = google_sql_database_instance.onxp-sql.name
+
+  depends_on = [google_service_networking_connection.private_vpc_connection_support]
+
+  settings {
+    tier = "db-f1-small"
+    availability_type = "ZONAL"
+    disk_autoresize = true
+    disk_size = 10
+    disk_type = "PD_SSD"
+
+    backup_configuration {
+      enabled = false
+    }
+
+    ip_configuration {
+      ipv4_enabled    = true
+      private_network = google_compute_network.main.id
+    }
+
+    location_preference {
+      zone = "${var.region}-a"
+    }
+
+    # bug?
+    deletion_protection_enabled = false
+    
+    insights_config {
+      query_insights_enabled = true
+    }
+  }
+
+  deletion_protection  = "false"
 }
 
 # Database
