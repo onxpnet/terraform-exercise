@@ -123,6 +123,6 @@ resource "google_service_account_iam_binding" "cloudsql-onxp-workload-identity" 
   role = "roles/iam.workloadIdentityUser"
 
   members = [
-    "serviceAccount:${var.project_id}.svc.id.goog[kong/cloudsql-onxp]",
+    "serviceAccount:${var.project_id}.svc.id.goog[exercise/onxp-exercise-sa]",
   ]
 }
