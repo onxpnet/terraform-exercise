@@ -36,3 +36,40 @@ resource "google_container_node_pool" "onxp-node-pool" {
     ]
   }
 }
+
+
+resource "google_container_node_pool" "onxp-alt-pool" {
+  name = "onxp-alt-pool"
+  cluster = google_container_cluster.observability-cluster.id
+
+  management {
+    auto_repair = true
+    auto_upgrade = true
+  }
+
+  autoscaling {
+    min_node_count = 1
+    max_node_count = 2
+    location_policy = "BALANCED"
+  }
+
+  node_locations = [
+    "asia-southeast2-a"
+  ]
+
+  node_config {
+    preemptible = false
+    machine_type = "e2-small"
+    disk_size_gb = 80
+    disk_type = "pd-balanced"
+
+    labels = {
+      operation = "onxp-alt-pool"
+    }
+
+    service_account = google_service_account.kubernetes-onxp-sa.email
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/cloud-platform"
+    ]
+  }
+}
