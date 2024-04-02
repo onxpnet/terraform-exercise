@@ -37,10 +37,10 @@ resource "google_container_node_pool" "onxp-node-pool" {
   }
 }
 
-
+# alternative nodepool
 resource "google_container_node_pool" "onxp-alt-pool" {
   name = "onxp-alt-pool"
-  cluster = google_container_cluster.observability-cluster.id
+  cluster = google_container_cluster.onxp-kubernetes.id
 
   management {
     auto_repair = true

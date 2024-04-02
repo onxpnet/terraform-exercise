@@ -100,6 +100,10 @@ resource "google_sql_user" "onxp-user" {
   name = "onxp"
   password = "onxpsecret"
   instance = google_sql_database_instance.onxp-sql.name
+
+  # if using vault
+  # name = data.vault_kv_secret_v2.vault-onxp-clousql.data["username"]
+  # password = data.vault_kv_secret_v2.vault-onxp-clousql.data["password"]
 }
 
 # [Recommendation] Create Service Account for CloudSQL
@@ -125,4 +129,10 @@ resource "google_service_account_iam_binding" "cloudsql-onxp-workload-identity" 
   members = [
     "serviceAccount:${var.project_id}.svc.id.goog[exercise/onxp-exercise-sa]",
   ]
+}
+
+# creds from vauilt
+data "vault_kv_secret_v2" "vault-onxp-clousql" {
+  name = "gpc/cloudsql"
+  mount = "kv"
 }
