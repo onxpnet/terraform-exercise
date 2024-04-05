@@ -34,3 +34,15 @@ resource "kubernetes_namespace" "argocd" {
     name = "argocd"
   }
 }
+
+resource "kubernetes_namespace" "elastic-system" {
+  metadata {
+    name = "elastic-system"
+  }
+}
+
+resource "kubernetes_namespace" "observability" {
+  metadata {
+    name = "observability"
+  }
+}
