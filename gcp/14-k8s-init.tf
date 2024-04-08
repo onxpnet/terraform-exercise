@@ -52,3 +52,9 @@ resource "kubernetes_namespace" "kyverno" {
     name = "kyverno"
   }
 }
+
+resource "kubernetes_namespace" "drone" {
+  metadata {
+    name = "drone"
+  }
+}
