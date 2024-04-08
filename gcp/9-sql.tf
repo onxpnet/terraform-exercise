@@ -131,8 +131,124 @@ resource "google_service_account_iam_binding" "cloudsql-onxp-workload-identity" 
   ]
 }
 
-# creds from vauilt
+# creds from vault
 data "vault_kv_secret_v2" "vault-onxp-clousql" {
   name = "gpc/cloudsql"
   mount = "kv"
 }
+
+# Another example using MySQL
+# resource "google_sql_database_instance" "onxp-mysql" {
+#   name = "onxp-mysql"
+#   region = var.region
+#   database_version = "MYSQL_8_0"
+
+#   depends_on = [google_service_networking_connection.private_vpc_connection_support]
+
+#   settings {
+#     tier = "db-f1-micro"
+#     availability_type = "ZONAL"
+#     disk_autoresize = true
+#     # disk_size = 20
+#     disk_type = "PD_SSD"
+
+#     backup_configuration {
+#       enabled = true
+#       location = var.region
+#       transaction_log_retention_days = 7
+#       binary_log_enabled = true
+
+#       backup_retention_settings {
+#         retained_backups = 7
+#       }
+#     }
+
+#     ip_configuration {
+#       ipv4_enabled    = true
+#       private_network = google_compute_network.main.id
+#       authorized_networks {
+#         name = "default"
+#         value = "0.0.0.0/0"
+#       }
+#     }
+
+#     insights_config {
+#       query_insights_enabled = true
+#     }
+    
+#     location_preference {
+#       zone = "${var.region}-a"
+#     }
+
+#     database_flags {
+#       name = "max_connections"
+#       value = 1000
+#     }
+
+#     maintenance_window {
+#       day  = 7
+#       hour = 7
+#     }
+#   }
+
+#   deletion_protection  = "true"
+# }
+
+# resource "google_sql_database_instance" "onxp-mysql-replica" {
+#   name = "onxp-mysql-replica"
+#   region = var.region
+#   database_version = "MYSQL_8_0"
+#   master_instance_name = google_sql_database_instance.onxp-mysql.name
+
+#   depends_on = [google_service_networking_connection.private_vpc_connection_support]
+
+#   settings {
+#     tier = "db-f1-small"
+#     availability_type = "ZONAL"
+#     disk_autoresize = true
+#     # disk_size = 20
+#     disk_type = "PD_SSD"
+
+#     backup_configuration {
+#       enabled = false
+#       transaction_log_retention_days = 7
+
+#       backup_retention_settings {
+#         retained_backups = 7
+#       }
+#     }
+
+#     ip_configuration {
+#       ipv4_enabled    = false
+#       private_network = google_compute_network.main.id
+#     }
+
+#     insights_config {
+#       query_insights_enabled = true
+#     }
+
+#     location_preference {
+#       zone = "${var.region}-a"
+#     }
+
+#     database_flags {
+#       name = "max_connections"
+#       value = 1000
+#     }
+#   }
+
+#   deletion_protection  = "true"
+# }
+
+# resource "google_sql_user" "onxp-mysql" {
+#   instance = google_sql_database_instance.onxp-mysql.name
+#   name = data.vault_kv_secret_v2.vault-onxp-clousql.data["mysql_username"]
+#   password = data.vault_kv_secret_v2.vault-onxp-clousql.data["mysql_password"]
+# }
+
+# # Used by proxysql
+# resource "google_sql_user" "monitoring-onxp-mysql" {
+#   instance = google_sql_database_instance.onxp-mysql.name
+#   name = data.vault_kv_secret_v2.vault-onxp-clousql.data["mysql_monitoring_username"]
+#   password = data.vault_kv_secret_v2.vault-onxp-clousql.data["mysql_monitoring_password"]
+# }
