@@ -64,3 +64,9 @@ resource "kubernetes_namespace" "registry" {
     name = "registry"
   }
 }
+
+resource "kubernetes_namespace" "argo-rollouts" {
+  metadata {
+    name = "argo-rollouts"
+  }
+}
