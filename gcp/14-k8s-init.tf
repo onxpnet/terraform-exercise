@@ -46,3 +46,9 @@ resource "kubernetes_namespace" "observability" {
     name = "observability"
   }
 }
+
+resource "kubernetes_namespace" "kyverno" {
+  metadata {
+    name = "kyverno"
+  }
+}
