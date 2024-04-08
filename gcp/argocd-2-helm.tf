@@ -1,15 +1,10 @@
-resource "argocd_repository" "csp-k8s-exercise" {
-  repo = "git@github.com:onxpnet/k8s-exercise.git"
-  username = "git"
-  name = "k8s-exercise"
-  ssh_private_key = base64decode("<base 64 ssh keys>")
-  insecure = true
-}
 
+# https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/application
 resource "argocd_application" "helm-redis-production" {
   metadata {
     name      = "redis-production"
-    namespace = "argocd" # namespace of argocd installation
+    # namespace of argocd installation
+    namespace = "argocd"
   }
 
   spec {
@@ -24,6 +19,8 @@ resource "argocd_application" "helm-redis-production" {
       target_revision = "19.0.1"
       helm {
         release_name = "redis"
+
+        # using parameter
         parameter {
           name  = "image.tag"
           value = "7.2.4-debian-12-r9"
@@ -32,6 +29,8 @@ resource "argocd_application" "helm-redis-production" {
           name  = "auth.enabled"
           value = "false"
         }
+
+        # using values string
         values = <<-VALUES
           architecture: standalone
           master:
@@ -39,6 +38,27 @@ resource "argocd_application" "helm-redis-production" {
               enabled: false
               usePassword: false
         VALUES
+
+        # using values.yaml file
+        # value_files = ["/path/to/values.yaml"]
+      }
+    }
+
+    sync_policy {
+      automated {
+        prune       = true
+        self_heal   = true
+        allow_empty = true
+      }
+      
+      sync_options = ["Validate=false"]
+      retry {
+        limit = "5"
+        backoff {
+          duration     = "30s"
+          max_duration = "2m"
+          factor       = "2"
+        }
       }
     }
   }
