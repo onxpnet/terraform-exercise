@@ -1,8 +1,8 @@
 
 # https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/application
-resource "argocd_application" "kustomize-oys-staging" {
+resource "argocd_application" "kustomize-exercise-app-staging" {
   metadata {
-    name      = "own-your-stack-staging"
+    name      = "exercise-app-staging"
     # namespace of argocd installation
     namespace = "argocd"
   }
@@ -15,7 +15,7 @@ resource "argocd_application" "kustomize-oys-staging" {
 
     source {
       repo_url = argocd_repository.csp-k8s-exercise.name
-      path = "application/kustomize/own-your-stack/overlays/staging"
+      path = "application/kustomize/exercise-app/overlays/staging"
       kustomize {}
     }
 
