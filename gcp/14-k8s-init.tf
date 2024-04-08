@@ -58,3 +58,9 @@ resource "kubernetes_namespace" "drone" {
     name = "drone"
   }
 }
+
+resource "kubernetes_namespace" "registry" {
+  metadata {
+    name = "registry"
+  }
+}
