@@ -39,3 +39,15 @@ resource "google_service_networking_connection" "private_vpc_connection_support"
   service                 = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [google_compute_global_address.private_ip_address_support.name]
 }
+
+# Example of creating vpc from remote modules
+# https://registry.terraform.io/modules/terraform-google-modules/network/google/latest/submodules/vpc
+module "vpc" {
+  source  = "terraform-google-modules/network/google//modules/vpc"
+  version = "9.0.0"
+  
+  project_id   = var.project_id
+  network_name = "vpc-modules"
+  
+  shared_vpc_host = false
+}
