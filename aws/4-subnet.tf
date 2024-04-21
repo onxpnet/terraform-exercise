@@ -5,7 +5,7 @@
 resource "aws_subnet" "public-subnet-1" {
   vpc_id = aws_vpc.main.id
   availability_zone = var.zone
-  cidr_block = "192.168.32.0/16"
+  cidr_block = "192.168.0.0/18"
 
   # automatically set IP Address for EC2 instances (LB) launched in public subnet
   map_public_ip_on_launch = true
@@ -20,7 +20,7 @@ resource "aws_subnet" "public-subnet-1" {
 resource "aws_subnet" "public-subnet-2" {
   vpc_id = aws_vpc.main.id
   availability_zone = var.zone
-  cidr_block = "192.168.64.0/16"
+  cidr_block = "192.168.64.0/18"
 
   # automatically set IP Address for EC2 instances (LB) launched in public subnet
   map_public_ip_on_launch = true
@@ -35,7 +35,7 @@ resource "aws_subnet" "public-subnet-2" {
 resource "aws_subnet" "private-subnet-1" {
   vpc_id = aws_vpc.main.id
   availability_zone = var.zone
-  cidr_block = "192.168.96.0/18"
+  cidr_block = "192.168.128.0/18"
 
   # automatically set IP Address for EC2 instances (LB) launched in public subnet
   map_public_ip_on_launch = true
@@ -50,7 +50,7 @@ resource "aws_subnet" "private-subnet-1" {
 resource "aws_subnet" "private-subnet-2" {
   vpc_id = aws_vpc.main.id
   availability_zone = var.zone
-  cidr_block = "192.168.128.0/18"
+  cidr_block = "192.168.192.0/18"
 
   # automatically set IP Address for EC2 instances (LB) launched in public subnet
   map_public_ip_on_launch = true
