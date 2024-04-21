@@ -1,11 +1,12 @@
 terraform {
 
   # https://developer.hashicorp.com/terraform/language/settings/backends/s3
-  backend "s3" {
-    bucket = "onxp-terraform"
-    key    = "terraform/state"
-    region = var.region
-  }
+  # If you want to use S3 as backend, uncomment this block
+  # backend "s3" {
+  #   bucket = "onxp-terraform"
+  #   key    = "terraform/state"
+  #   region = "us-east-1"
+  # }
 
   required_providers {
     aws = {
