@@ -54,3 +54,16 @@ resource "aws_eks_cluster" "eks" {
     aws_iam_role_policy_attachment.onxp-eks-cluster-policy
   ]
 }
+
+# CSI Addons
+# https://aws.amazon.com/blogs/containers/amazon-ebs-csi-driver-is-now-generally-available-in-amazon-eks-add-ons/ 
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_addon
+resource "aws_eks_addon" "ebs-csi" {
+  cluster_name = var.cluster_name
+  addon_name = "aws-ebs-csi-driver"
+  addon_version = "v1.20.0-eksbuild.1"
+  tags = {
+    "eks_addon" = "ebs-csi"
+    "terraform" = "true"
+  }
+}
