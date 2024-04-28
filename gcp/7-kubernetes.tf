@@ -5,7 +5,7 @@ resource "google_container_cluster" "onxp-kubernetes" {
   location           = "${var.region}-a"
 
   # simple tenary operator
-  initial_node_count = local.local.use_initial_node ? 1 : 0
+  initial_node_count = local.use_initial_node ? 1 : 0
   remove_default_node_pool = true
   network = google_compute_network.main.self_link
   subnetwork = google_compute_subnetwork.private.self_link
