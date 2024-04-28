@@ -3,7 +3,9 @@
 resource "google_container_cluster" "onxp-kubernetes" {
   name               = var.cluster
   location           = "${var.region}-a"
-  initial_node_count = 1
+
+  # simple tenary operator
+  initial_node_count = local.local.use_initial_node ? 1 : 0
   remove_default_node_pool = true
   network = google_compute_network.main.self_link
   subnetwork = google_compute_subnetwork.private.self_link
@@ -37,6 +39,12 @@ resource "google_container_cluster" "onxp-kubernetes" {
   }
 
   workload_identity_config {
-    workload_pool = "${var.project_id}.svc.id.goog"
+    workload_pool = "${var.project_id}.${local.google_pool_name}"
   }
+}
+
+# using local values
+locals {
+  google_pool_name = "svc.id.goog"
+  use_initial_node = true
 }

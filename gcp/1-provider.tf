@@ -1,6 +1,8 @@
 # Init command
 # gcloud config set project mashanz-software-engineering
 
+# For linting and formatting, check: https://developer.hashicorp.com/terraform/language/style
+
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs
 provider "google" {
   project = var.project_id
