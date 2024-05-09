@@ -19,7 +19,7 @@ resource "aws_subnet" "public-subnet-1" {
 
 resource "aws_subnet" "public-subnet-2" {
   vpc_id = aws_vpc.main.id
-  availability_zone = var.zone
+  availability_zone = var.zone2
   cidr_block = "192.168.64.0/18"
 
   # automatically set IP Address for EC2 instances (LB) launched in public subnet
@@ -49,7 +49,7 @@ resource "aws_subnet" "private-subnet-1" {
 
 resource "aws_subnet" "private-subnet-2" {
   vpc_id = aws_vpc.main.id
-  availability_zone = var.zone
+  availability_zone = var.zone2
   cidr_block = "192.168.192.0/18"
 
   # automatically set IP Address for EC2 instances (LB) launched in public subnet

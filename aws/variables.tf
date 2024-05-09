@@ -10,6 +10,13 @@ variable "zone" {
   default = "us-east-1a"
 }
 
+variable "zone2" {
+  description = "Zone of project"
+  type = string
+  default = "us-east-1a"
+}
+
+
 variable "cluster_name" {
   description = "K8s Cluster name"
   type = string
