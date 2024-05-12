@@ -49,6 +49,28 @@ resource "google_compute_instance" "onxp_vm" {
   allow_stopping_for_update = true
 }
 
+# query the latest image, for latest "hardened" image
+data "google_compute_image" "onx_ubuntu_image" {
+  family  = var.image_family
+  project = var.project_id
+}
+
+resource "google_compute_instance" "vm_packer" {
+  name         = "vm-packer"
+  machine_type = "e2-micro"
+  zone         = "${var.region}-a"
+
+  boot_disk {
+    initialize_params {
+      image = data.google_compute_image.onx_ubuntu_image.self_link
+    }
+  }
+
+  network_interface {
+    network = "default"
+  }
+}
+
 # using local values
 locals {
   gce_user = "glendmaatita_me"

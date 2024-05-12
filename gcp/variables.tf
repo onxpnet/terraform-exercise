@@ -21,3 +21,8 @@ variable "vault_url" {
   type = string
   default = "https://vault.ops.onxp.net"
 }
+
+variable "image_family" {
+  type    = string
+  default = "onxp-ubuntu-jammy"
+}
