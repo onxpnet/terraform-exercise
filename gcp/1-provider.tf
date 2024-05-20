@@ -1,4 +1,5 @@
 # Init command
+# gcloud auth login
 # gcloud config set project mashanz-software-engineering
 
 # For linting and formatting, check: https://developer.hashicorp.com/terraform/language/style

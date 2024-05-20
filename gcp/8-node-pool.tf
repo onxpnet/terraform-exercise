@@ -27,7 +27,7 @@ resource "google_container_node_pool" "onxp-node-pool" {
   node_config {
     preemptible  = true
     machine_type = "e2-micro"
-    disk_size_gb = 80
+    disk_size_gb = 30
     disk_type = "pd-balanced"
 
     service_account = google_service_account.kubernetes-onxp-sa.email
@@ -60,7 +60,7 @@ resource "google_container_node_pool" "onxp-alt-pool" {
   node_config {
     preemptible = false
     machine_type = "e2-small"
-    disk_size_gb = 80
+    disk_size_gb = 30
     disk_type = "pd-balanced"
 
     labels = {
