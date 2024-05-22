@@ -25,3 +25,7 @@ terraform {
     }
   }
 }
+
+# get creds
+# gcloud config set project mashanz-software-engineering
+# gcloud container clusters get-credentials onxp-bootcamp-cluster  --region=us-central1-a
