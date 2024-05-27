@@ -71,6 +71,108 @@ resource "google_compute_instance" "vm_packer" {
   }
 }
 
+# resource "google_compute_instance" "gke-fn5-vm" {
+#   name         = "gke-fn5-vm"
+#   machine_type = "e2-standard-8"
+#   zone         = "${var.region}-a"
+
+#   tags = ["vm", "gke-fn", "ns"]
+
+#   boot_disk {
+#     initialize_params {
+#       image = "ubuntu-os-cloud/ubuntu-2204-lts"
+#       size = 200
+#       type = "pd-balanced"
+#     }
+#   }
+
+#   network_interface {
+#     subnetwork = google_compute_subnetwork.private.self_link
+#     access_config {}
+#   }
+
+#   service_account {
+#     email  = google_service_account.vm-sa.email
+#     scopes = ["cloud-platform"]
+#   }
+
+#   metadata = {
+#     ssh-keys = "${var.gce_user}:${file("./keys/id_rsa.pub")}"
+#     serial-port-logging-enable = "TRUE"
+#   }
+
+#   deletion_protection = false
+#   allow_stopping_for_update = true
+# }
+
+# resource "google_compute_instance" "gke-fn6-vm" {
+#   name         = "gke-fn6-vm"
+#   machine_type = "e2-standard-8"
+#   zone         = "${var.region}-a"
+
+#   tags = ["vm", "gke-fn", "ns"]
+
+#   boot_disk {
+#     initialize_params {
+#       image = "ubuntu-os-cloud/ubuntu-2204-lts"
+#       size = 200
+#       type = "pd-balanced"
+#     }
+#   }
+
+#   network_interface {
+#     subnetwork = google_compute_subnetwork.private.self_link
+#     access_config {}
+#   }
+
+#   service_account {
+#     email  = google_service_account.vm-sa.email
+#     scopes = ["cloud-platform"]
+#   }
+
+#   metadata = {
+#     ssh-keys = "${var.gce_user}:${file("./keys/id_rsa.pub")}"
+#     serial-port-logging-enable = "TRUE"
+#   }
+
+#   deletion_protection = false
+#   allow_stopping_for_update = true
+# }
+
+# resource "google_compute_instance" "gke-fn7-vm" {
+#   name         = "gke-fn7-vm"
+#   machine_type = "e2-standard-8"
+#   zone         = "${var.region}-a"
+
+#   tags = ["vm", "gke-fn", "ns"]
+
+#   boot_disk {
+#     initialize_params {
+#       image = "ubuntu-os-cloud/ubuntu-2204-lts"
+#       size = 200
+#       type = "pd-balanced"
+#     }
+#   }
+
+#   network_interface {
+#     subnetwork = google_compute_subnetwork.private.self_link
+#     access_config {}
+#   }
+
+#   service_account {
+#     email  = google_service_account.vm-sa.email
+#     scopes = ["cloud-platform"]
+#   }
+
+#   metadata = {
+#     ssh-keys = "${var.gce_user}:${file("./keys/id_rsa.pub")}"
+#     serial-port-logging-enable = "TRUE"
+#   }
+
+#   deletion_protection = false
+#   allow_stopping_for_update = true
+# }
+
 # using local values
 locals {
   gce_user = "glendmaatita_me"
