@@ -28,8 +28,8 @@ resource "google_compute_firewall" "allow-http" {
 
 # setting for nomad and consul cluster
 # it's recommended to separate the firewall rules for each needs
-resource "google_compute_firewall" "allow-ns-firewall" {
-  name = "allow-ns-fn"
+resource "google_compute_firewall" "nomad-cluster-firewall" {
+  name = "nomad-cluster-fn"
   network = google_compute_network.main.name
 
   allow {
@@ -48,7 +48,36 @@ resource "google_compute_firewall" "allow-ns-firewall" {
     ]
   }
 
-  target_tags = ["ns"]
+  target_tags = ["nomad"]
+  
+  # just example, it's recommended to restrict to specific IP based on needs
+  source_ranges = ["0.0.0.0/0"]
+}
+
+# setting for swarm cluster
+# it's recommended to separate the firewall rules for each needs
+resource "google_compute_firewall" "swarm-cluster-firewall" {
+  name = "swarm-cluster-fn"
+  network = google_compute_network.main.name
+
+  allow {
+    protocol = "tcp"
+    ports = [ 
+      "2377",  # for manager nodes. CLuster management communications
+      "7946",  # for all nodes, communication among nodes
+      "4789",  # nomad, restricted to cluster's node
+    ]
+  }
+
+  allow {
+    protocol = "udp"
+    ports = [
+      "7946",  # for all nodes, communication among nodes
+      "4789",  # nomad, restricted to cluster's node
+    ]
+  }
+
+  target_tags = ["swarm"]
   
   # just example, it's recommended to restrict to specific IP based on needs
   source_ranges = ["0.0.0.0/0"]
