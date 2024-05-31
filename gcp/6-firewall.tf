@@ -82,3 +82,48 @@ resource "google_compute_firewall" "swarm-cluster-firewall" {
   # just example, it's recommended to restrict to specific IP based on needs
   source_ranges = ["0.0.0.0/0"]
 }
+
+# https://docs.rke2.io/install/requirements#inbound-network-rules
+# setting for swarm cluster
+# it's recommended to separate the firewall rules for each needs
+resource "google_compute_firewall" "rke-cluster-firewall" {
+  name = "rke-cluster-fn"
+  network = google_compute_network.main.name
+
+  allow {
+    protocol = "tcp"
+    ports = [ 
+      "9345", # RKE2 supervisor API, set on masters, workers -> masters
+      "6443", # Kubernetes API, set on masters, workers -> masters
+      "10250", # kubelet metrics, set on nodes, nodes -> nodes
+      "2379", # etcd client port, set on masters, masters -> masters
+      "2380", # etcd peer port, set on masters, masters -> masters
+      "2381", # etcd metrics port, set on masters, masters -> masters
+      "30000-32767", # NodePort port range, set on nodes, nodes -> nodes
+      "4240", # CNI, set on nodes, nodes -> nodes
+      "179", # CNI, set on nodes, nodes -> nodes
+      "5473", # CNI, set on nodes, nodes -> nodes
+      "9098", # CNI, set on nodes, nodes -> nodes
+      "9099", # CNI, set on nodes, nodes -> nodes
+    ]
+  }
+
+  allow {
+    protocol = "udp"
+    ports = [ 
+      "8472", # VXLAN, set on nodes, nodes -> nodes,
+      "51820", # VXLAN, set on nodes, nodes -> nodes,
+      "51821", # VXLAN, set on nodes, nodes -> nodes,
+      "4789", # VXLAN, set on nodes, nodes -> nodes,
+    ]
+  }
+
+  allow {
+    protocol = "icmp"
+  }
+
+  target_tags = ["rke"]
+  
+  # just example, it's recommended to restrict to specific IP based on needs
+  source_ranges = ["0.0.0.0/0"]
+}
