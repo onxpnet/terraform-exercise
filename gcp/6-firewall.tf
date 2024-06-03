@@ -65,7 +65,7 @@ resource "google_compute_firewall" "swarm-cluster-firewall" {
     ports = [ 
       "2377",  # for manager nodes. CLuster management communications
       "7946",  # for all nodes, communication among nodes
-      "4789",  # nomad, restricted to cluster's node
+      "4789",  # for all nodes, communication among nodes
       "3000-4000", # for all nodes, port range for services
     ]
   }
@@ -74,7 +74,7 @@ resource "google_compute_firewall" "swarm-cluster-firewall" {
     protocol = "udp"
     ports = [
       "7946",  # for all nodes, communication among nodes
-      "4789",  # nomad, restricted to cluster's node
+      "4789",  # for all nodes, communication among nodes
     ]
   }
 
