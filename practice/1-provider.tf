@@ -11,6 +11,13 @@ provider "google" {
   region = var.region
 }
 
+# https://registry.terraform.io/providers/cloudflare/cloudflare/latest
+provider "cloudflare" {
+  # or configure via env CLOUDFLARE_API_TOKEN
+  # api_token = xyz"
+}
+
+
 # https://terraform.io/language/settings/backends/gcs
 terraform {
   backend "gcs" {
@@ -22,6 +29,11 @@ terraform {
     google = {
       source = "hashicorp/google"
       version = "5.14.0"
+    }
+
+    cloudflare = {
+      source = "cloudflare/cloudflare"
+      version = "4.34.0"
     }
   }
 }

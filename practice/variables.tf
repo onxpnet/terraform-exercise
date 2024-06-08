@@ -26,3 +26,8 @@ variable "image_family" {
   type    = string
   default = "onxp-ubuntu-jammy"
 }
+
+variable "cloudflare_zone_id" {
+  type    = string
+  default = ""
+}
