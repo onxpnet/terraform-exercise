@@ -17,12 +17,12 @@ resource "google_compute_instance" "ansible-onxp-vm" {
   machine_type = "e2-standard-8"
   zone         = "${var.region}-a"
 
-  tags = ["vm", "gke-fn", "ns"]
+  tags = ["vm", "ansible"]
 
   boot_disk {
     initialize_params {
       image = "ubuntu-os-cloud/ubuntu-2204-lts"
-      size = 200
+      size = 80
       type = "pd-balanced"
     }
   }
