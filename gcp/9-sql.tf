@@ -122,6 +122,18 @@ resource "google_project_iam_member" "cloudsql-onxp-iam" {
 
 # set workload identity: attach GSA to KSA
 # parameters: k8s namespace and service account
+
+# manual:
+# ~$ gcloud iam service-accounts add-iam-policy-binding \
+#   --role roles/iam.workloadIdentityUser \
+#   --member "serviceAccount:mashanz-software-engineering.svc.id.goog[exercise/onxp-exercise-sa]" \
+#   cloudsql-onxp-sa@mashanz-software-engineering.iam.gserviceaccount.com
+# 
+# Annotate the KSA to tie it with GSA
+# ~$ kubectl annotate serviceaccount \
+#   --namespace exercise \
+#   onxp-exercise-sa \
+#   iam.gke.io/gcp-service-account=cloudsql-onxp-sa@mashanz-software-engineering.iam.gserviceaccount.com
 resource "google_service_account_iam_binding" "cloudsql-onxp-workload-identity" {
   service_account_id = google_service_account.cloudsql-onxp.id
   role = "roles/iam.workloadIdentityUser"
