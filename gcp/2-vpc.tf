@@ -1,15 +1,22 @@
 # VPC
 
 # Enable Google API
+# gcloud: gcloud services enable compute.googleapis.com --project=mashanz-software-engineering
 resource "google_project_service" "compute" {
   service = "compute.googleapis.com"
 }
 
+# gcloud: gcloud services enable container.googleapis.com --project=mashanz-software-engineering
 resource "google_project_service" "container" {
   service = "container.googleapis.com"
 }
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_network
+
+# gcloud: gcloud compute networks create main --subnet-mode=custom \
+# --mtu=1460 --bgp-routing-mode=regional \
+# --delete-default-routes-on-create=false \
+# --project=mashanz-software-engineering \
 resource "google_compute_network" "main" {
   name = "main"
   routing_mode = "REGIONAL"
@@ -26,6 +33,14 @@ resource "google_compute_network" "main" {
 
 # VPC Peering to Google Service
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_global_address
+
+# gcloud: gcloud compute addresses create private-ip-address-support \
+# --global \
+# --purpose=VPC_PEERING \
+# --addresses-type=INTERNAL \
+# --prefix-length=16 \
+# --network=main
+# --project=mashanz-software-engineering
 resource "google_compute_global_address" "private_ip_address_support" {
   name          = "private-ip-address-support"
   purpose       = "VPC_PEERING"
@@ -35,6 +50,12 @@ resource "google_compute_global_address" "private_ip_address_support" {
 }
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_networking_connection
+
+# gcloud: gcloud services vpc-peerings connect \
+# --service=servicenetworking.googleapis.com \
+# --ranges=PRIVATE_IP_ADDRESS_RANGE_NAME \
+# --network=main \
+# --project=mashanz-software-engineering
 resource "google_service_networking_connection" "private_vpc_connection_support" {
   network                 = google_compute_network.main.id
   service                 = "servicenetworking.googleapis.com"

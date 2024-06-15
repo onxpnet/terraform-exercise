@@ -1,5 +1,9 @@
 # NAT
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_router_nat
+
+# gcloud: gcloud compute routers create onxp-router \
+# --region=REGION \
+# --network=main
 resource "google_compute_router_nat" "onxp-nat" {
   name   = "onxp-nat"
   router = google_compute_router.onxp-router.name
@@ -20,6 +24,11 @@ resource "google_compute_router_nat" "onxp-nat" {
 
 # Reserve Static IP Address for NAT
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_address
+
+# gcloud: gcloud compute addresses create onxp-nat-address \
+# --global \
+# --ip-version=IPV4 \
+# --network-tier=PREMIUM
 resource "google_compute_address" "onxp-nat-address" {
   name = "onxp-nat-address"
   address_type = "EXTERNAL"
