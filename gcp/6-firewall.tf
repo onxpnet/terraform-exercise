@@ -1,6 +1,5 @@
 # Firewall
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall
-
 resource "google_compute_firewall" "allow-ssh" {
   name    = "allow-ssh"
   network = google_compute_network.main.name
@@ -85,7 +84,7 @@ resource "google_compute_firewall" "swarm-cluster-firewall" {
 }
 
 # https://docs.rke2.io/install/requirements#inbound-network-rules
-# setting for swarm cluster
+# setting for RKE cluster
 # it's recommended to separate the firewall rules for each needs
 resource "google_compute_firewall" "rke-cluster-firewall" {
   name = "rke-cluster-fn"
@@ -109,6 +108,10 @@ resource "google_compute_firewall" "rke-cluster-firewall" {
     ]
   }
 
+  # The VXLAN port on nodes should not be exposed to the world 
+  # as it opens up your cluster network to be accessed by anyone. 
+  # Run your nodes behind a firewall/security group that disables 
+  # access to port 8472.
   allow {
     protocol = "udp"
     ports = [ 
@@ -124,6 +127,44 @@ resource "google_compute_firewall" "rke-cluster-firewall" {
   }
 
   target_tags = ["rke"]
+  
+  # just example, it's recommended to restrict to specific IP based on needs
+  source_ranges = ["0.0.0.0/0"]
+}
+
+
+# https://docs.rke2.io/install/requirements#inbound-network-rules
+# setting for K3s cluster
+# it's recommended to separate the firewall rules for each needs
+resource "google_compute_firewall" "k3s-cluster-firewall" {
+  name = "k3s-cluster-fn"
+  network = google_compute_network.main.name
+
+  allow {
+    protocol = "tcp"
+    ports = [ 
+      "2379", # etcd client port, set on masters, masters -> masters
+      "2380", # etcd peer port, set on masters, masters -> masters
+      "10250", # kubelet metrics, set on nodes
+      "5001", # Spegel, set on nodes
+      "6443", # Spegel, set on nodes
+    ]
+  }
+
+  # The VXLAN port on nodes should not be exposed to the world 
+  # as it opens up your cluster network to be accessed by anyone. 
+  # Run your nodes behind a firewall/security group that disables 
+  # access to port 8472.
+  allow {
+    protocol = "udp"
+    ports = [ 
+      "8472", # VXLAN, set on nodes, nodes -> nodes,
+      "51820", # Flannel WireGuard, set on nodes, nodes -> nodes,
+      "51821", # Flannel WireGuard, set on nodes, nodes -> nodes
+    ]
+  }
+
+  target_tags = ["k3s"]
   
   # just example, it's recommended to restrict to specific IP based on needs
   source_ranges = ["0.0.0.0/0"]
