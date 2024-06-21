@@ -12,6 +12,7 @@ resource "google_compute_firewall" "allow-ssh" {
   source_ranges = ["0.0.0.0/0"]
 }
 
+# suitable for webserver or load balancer
 resource "google_compute_firewall" "allow-http" {
   name    = "allow-http"
   network = google_compute_network.main.name
@@ -131,7 +132,6 @@ resource "google_compute_firewall" "rke-cluster-firewall" {
   # just example, it's recommended to restrict to specific IP based on needs
   source_ranges = ["0.0.0.0/0"]
 }
-
 
 # https://docs.rke2.io/install/requirements#inbound-network-rules
 # setting for K3s cluster
