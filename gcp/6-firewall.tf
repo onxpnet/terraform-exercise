@@ -169,3 +169,38 @@ resource "google_compute_firewall" "k3s-cluster-firewall" {
   # just example, it's recommended to restrict to specific IP based on needs
   source_ranges = ["0.0.0.0/0"]
 }
+
+# https://microk8s.io/docs/services-and-ports
+# setting for Microk8s cluster
+# it's recommended to separate the firewall rules for each needs
+resource "google_compute_firewall" "microk8s-cluster-firewall" {
+  name = "microk8s-cluster-fn"
+  network = google_compute_network.main.name
+
+  allow {
+    protocol = "tcp"
+    ports = [ 
+      "16443", # API Server
+      "10250", # kubelet
+      "10255", # kubelet
+      "25000", # cluster-agent
+      "12379", # etcd
+      "10257", # kube-controller
+      "10259", # kube-scheduler
+      "19001" # dqlite
+    ]
+  }
+
+  allow {
+    protocol = "udp"
+    ports = [ 
+      "4789", # calico, set on nodes, nodes -> nodes
+    ]
+  }
+
+  target_tags = ["microk8s"]
+  
+  # just example, it's recommended to restrict to specific IP based on needs
+  source_ranges = ["0.0.0.0/0"]
+}
+
