@@ -204,3 +204,27 @@ resource "google_compute_firewall" "microk8s-cluster-firewall" {
   source_ranges = ["0.0.0.0/0"]
 }
 
+# https://developer.hashicorp.com/boundary/docs/install-boundary/architecture/system-requirements#network-connectivity
+# setting for Boundary Controller
+# it's recommended to separate the firewall rules for each needs
+resource "google_compute_firewall" "boundary-firewall" {
+  name = "boundary-firewall"
+  network = google_compute_network.main.name
+
+  allow {
+    protocol = "tcp"
+    ports = [ 
+      "443", # client to lb
+      "9202", # client to worker
+      "9200", # lb to controller, ingress. no need to setup if LB + controller is in 1 VM
+      "9203", # lb to controller, Health check
+      "9201", # worker to lb, Session auth + creds + etc
+      "5432", # controller to postgres, set on postgre node
+    ]
+  }
+
+  target_tags = ["boundary"]
+  
+  # just example, it's recommended to restrict to specific IP based on needs
+  source_ranges = ["0.0.0.0/0"]
+}
