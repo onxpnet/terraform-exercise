@@ -31,13 +31,15 @@ resource "google_container_cluster" "onxp-bootcamp-cluster" {
   }
 
   ip_allocation_policy {
-    cluster_secondary_range_name = google_compute_subnetwork.onxp-bootcamp-subnet.secondary_ip_range[0].range_name # pods/container di dalam VM instance (cluster)
-    services_secondary_range_name = google_compute_subnetwork.onxp-bootcamp-subnet.secondary_ip_range[1].range_name # services
+    # pods/container di dalam VM instance (cluster)
+    cluster_secondary_range_name = google_compute_subnetwork.onxp-bootcamp-subnet.secondary_ip_range[0].range_name
+    # services
+    services_secondary_range_name = google_compute_subnetwork.onxp-bootcamp-subnet.secondary_ip_range[1].range_name
   }
 
   private_cluster_config {
     enable_private_nodes = true
-    # kita pengen control k8s dari local
+    # kita pengen manage k8s dari local
     enable_private_endpoint = false
     master_ipv4_cidr_block = "172.24.0.0/28"
   }
@@ -48,7 +50,7 @@ resource "google_container_node_pool" "onxp-bootcamp-node-pool" {
   name       = "onxp-bootcamp-node-pool"
   location   = "${var.region}-a"
   cluster    = google_container_cluster.onxp-bootcamp-cluster.name
-  node_count = 1
+  node_count = 2
 
   management {
     auto_repair = true
@@ -67,7 +69,7 @@ resource "google_container_node_pool" "onxp-bootcamp-node-pool" {
 
   node_config {
     preemptible  = true
-    machine_type = "e2-micro"
+    machine_type = "e2-medium"
     disk_size_gb = 30
     disk_type    = "pd-standard"
 
