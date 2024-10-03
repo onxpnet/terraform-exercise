@@ -43,6 +43,8 @@ resource "google_container_cluster" "onxp-bootcamp-cluster" {
     enable_private_endpoint = false
     master_ipv4_cidr_block = "172.24.0.0/28"
   }
+
+  deletion_protection  = "false"
 }
 
 
@@ -58,8 +60,8 @@ resource "google_container_node_pool" "onxp-bootcamp-node-pool" {
   }
 
   autoscaling {
-    min_node_count = 1
-    max_node_count = 2
+    min_node_count = 2
+    max_node_count = 3
     location_policy = "BALANCED"
   }
 
