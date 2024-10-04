@@ -82,3 +82,43 @@ resource "google_container_node_pool" "onxp-bootcamp-node-pool" {
     ]
   }
 }
+
+resource "google_container_node_pool" "secondary-node-pool" {
+  name       = "secondary-node-pool"
+  location   = "${var.region}-a"
+  cluster    = google_container_cluster.onxp-bootcamp-cluster.name
+  node_count = 2
+
+  management {
+    auto_repair = true
+    auto_upgrade = true
+  }
+
+  autoscaling {
+    min_node_count = 2
+    max_node_count = 3
+    location_policy = "BALANCED"
+  }
+
+  node_locations = [
+    "${var.region}-a"
+  ]
+
+  node_config {
+    preemptible  = true
+    machine_type = "e2-medium"
+    disk_size_gb = 30
+    disk_type    = "pd-standard"
+
+    labels = {
+      operation = "onxp-alt-pool"
+    }
+    
+
+    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
+    service_account = google_service_account.onxp-bootcamp-k8s-sa.email
+    oauth_scopes    = [
+      "https://www.googleapis.com/auth/cloud-platform"
+    ]
+  }
+}
