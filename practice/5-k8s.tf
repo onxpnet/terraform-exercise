@@ -113,6 +113,13 @@ resource "google_container_node_pool" "secondary-node-pool" {
     labels = {
       operation = "onxp-alt-pool"
     }
+
+    # using taints
+    # taint {
+    #   operation-taints = "alt-taints"
+    #   value  = "true"
+    #   effect = "NO_SCHEDULE"
+    # }
     
 
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
