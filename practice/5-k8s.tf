@@ -39,7 +39,7 @@ resource "google_container_cluster" "onxp-bootcamp-cluster" {
 
   private_cluster_config {
     enable_private_nodes = true
-    # kita pengen manage k8s dari local
+    # manage k8s from local
     enable_private_endpoint = false
     master_ipv4_cidr_block = "172.24.0.0/28"
   }
@@ -83,49 +83,49 @@ resource "google_container_node_pool" "onxp-bootcamp-node-pool" {
   }
 }
 
-resource "google_container_node_pool" "secondary-node-pool" {
-  name       = "secondary-node-pool"
-  location   = "${var.region}-a"
-  cluster    = google_container_cluster.onxp-bootcamp-cluster.name
-  node_count = 2
+# resource "google_container_node_pool" "secondary-node-pool" {
+#   name       = "secondary-node-pool"
+#   location   = "${var.region}-a"
+#   cluster    = google_container_cluster.onxp-bootcamp-cluster.name
+#   node_count = 2
 
-  management {
-    auto_repair = true
-    auto_upgrade = true
-  }
+#   management {
+#     auto_repair = true
+#     auto_upgrade = true
+#   }
 
-  autoscaling {
-    min_node_count = 2
-    max_node_count = 3
-    location_policy = "BALANCED"
-  }
+#   autoscaling {
+#     min_node_count = 2
+#     max_node_count = 3
+#     location_policy = "BALANCED"
+#   }
 
-  node_locations = [
-    "${var.region}-a"
-  ]
+#   node_locations = [
+#     "${var.region}-a"
+#   ]
 
-  node_config {
-    preemptible  = true
-    machine_type = "e2-medium"
-    disk_size_gb = 30
-    disk_type    = "pd-standard"
+#   node_config {
+#     preemptible  = true
+#     machine_type = "e2-medium"
+#     disk_size_gb = 30
+#     disk_type    = "pd-standard"
 
-    labels = {
-      operation = "onxp-alt-pool"
-    }
+#     labels = {
+#       operation = "onxp-alt-pool"
+#     }
 
-    # using taints
-    # taint {
-    #   operation-taints = "alt-taints"
-    #   value  = "true"
-    #   effect = "NO_SCHEDULE"
-    # }
+#     # using taints
+#     # taint {
+#     #   operation-taints = "alt-taints"
+#     #   value  = "true"
+#     #   effect = "NO_SCHEDULE"
+#     # }
     
 
-    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-    service_account = google_service_account.onxp-bootcamp-k8s-sa.email
-    oauth_scopes    = [
-      "https://www.googleapis.com/auth/cloud-platform"
-    ]
-  }
-}
+#     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
+#     service_account = google_service_account.onxp-bootcamp-k8s-sa.email
+#     oauth_scopes    = [
+#       "https://www.googleapis.com/auth/cloud-platform"
+#     ]
+#   }
+# }
